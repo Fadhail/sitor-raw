@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Face Expression Detection</title>
+    <script defer src="face-api.min.js"></script>
+    <script defer src="script.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <!-- Video Container -->
+    <div class="video-container mt-6 flex justify-center relative">
+        <video id="video" width="600" height="450" autoplay muted class="block z-0 rounded-md shadow-lg"></video>
+        <canvas id="overlay" class="absolute top-0 left-0 z-10"></canvas>
+    </div>
+</body>
+
+</html>
