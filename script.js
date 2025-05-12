@@ -1,5 +1,9 @@
 const video = document.getElementById('video');
 const canvas = document.getElementById('overlay');
+const startButton = document.getElementById('startButton');
+const stopButton = document.getElementById('stopButton');
+const expressionList = document.getElementById('expressionList');
+let isDetecting = false;
 
 // Load all required face-api.js models
 Promise.all([
@@ -28,6 +32,8 @@ video.addEventListener('playing', () => {
 
     // Start face detection loop
     setInterval(async () => {
+        if (!isDetecting) return;
+
         const detections = await faceapi.detectAllFaces(
             video,
             new faceapi.TinyFaceDetectorOptions()
@@ -52,6 +58,29 @@ video.addEventListener('playing', () => {
             drawBox.draw(canvas);
             console.log(gender);
         });
+
+        // Clear previous results
+        expressionList.innerHTML = '';
+
+        // Display results
+        resizedDetections.forEach(detection => {
+            const expressions = detection.expressions;
+            const sortedExpressions = Object.entries(expressions).sort((a, b) => b[1] - a[1]);
+            sortedExpressions.forEach(([expression, confidence]) => {
+                const li = document.createElement('li');
+                li.textContent = `${expression}: ${(confidence * 100).toFixed(2)}%`;
+                expressionList.appendChild(li);
+            });
+        });
     }, 100);
+});
+
+// Event listeners
+startButton.addEventListener('click', () => {
+    isDetecting = true;
+});
+
+stopButton.addEventListener('click', () => {
+    isDetecting = false;
 });
 
