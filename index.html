@@ -6,38 +6,46 @@
     <title>Face Expression Detection</title>
     <script defer src="face-api.min.js"></script>
     <script defer src="script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
 
-<body class="flex flex-col items-center justify-center h-screen bg-gray-100">
+<body class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-blue-200">
     <!-- Header -->
-    <header class="text-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">SITOR - Face Expression Detection</h1>
-        <p class="text-gray-600 mt-2">Aplikasi untuk mendeteksi ekspresi wajah secara real-time.</p>
+    <header class="text-center mb-8">
+        <h1 class="text-4xl font-extrabold text-gray-800">SITOR - Face Expression Detection</h1>
+        <p class="text-gray-700 mt-3 text-lg">Aplikasi untuk mendeteksi ekspresi wajah secara real-time.</p>
     </header>
 
-    <!-- Video Container -->
-    <div class="video-container mt-6 flex justify-center relative">
-        <video id="video" width="600" height="450" autoplay muted class="block z-0 rounded-md shadow-lg"></video>
-        <canvas id="overlay" class="absolute top-0 left-0 z-10"></canvas>
-    </div>
+    <!-- Main Container -->
+    <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-4xl">
+        <!-- Video Container -->
+        <div class="video-container flex justify-center relative mb-6">
+            <video id="video" width="600" height="450" autoplay muted
+                class="block z-0 rounded-md shadow-lg border border-gray-300"></video>
+            <canvas id="overlay" class="absolute top-0 left-0 z-10"></canvas>
+        </div>
 
-    <!-- Controls -->
-    <div class="mt-4 flex space-x-4">
-        <button id="startButton" class="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600">
-            Mulai Deteksi
-        </button>
-        <button id="stopButton" class="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600">
-            Berhenti
-        </button>
-    </div>
+        <!-- Controls -->
+        <div class="flex justify-center space-x-4 mb-6">
+            <button id="startButton"
+                class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+                Mulai Deteksi
+            </button>
+            <button id="stopButton"
+                class="px-6 py-3 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition duration-300">
+                Berhenti
+            </button>
+        </div>
 
-    <!-- Results -->
-    <div id="results" class="mt-6 p-4 bg-white rounded-md shadow-md w-3/4">
-        <h2 class="text-xl font-semibold text-gray-800">Hasil Deteksi</h2>
-        <ul id="expressionList" class="mt-2 text-gray-700">
-            <!-- Hasil deteksi akan ditampilkan di sini -->
-        </ul>
+        <!-- Results -->
+        <div id="results" class="p-6 bg-gray-50 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Hasil Deteksi</h2>
+            <ul id="expressionList" class="text-gray-700 space-y-2">
+                <!-- Hasil deteksi akan ditampilkan di sini -->
+            </ul>
+            <canvas id="expressionChart" class="mt-6"></canvas>
+        </div>
     </div>
 </body>
 

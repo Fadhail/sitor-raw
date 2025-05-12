@@ -3,6 +3,7 @@ const canvas = document.getElementById('overlay');
 const startButton = document.getElementById('startButton');
 const stopButton = document.getElementById('stopButton');
 const expressionList = document.getElementById('expressionList');
+const expressionChartCtx = document.getElementById('expressionChart').getContext('2d');
 let isDetecting = false;
 
 // Load all required face-api.js models
@@ -29,6 +30,42 @@ video.addEventListener('playing', () => {
 
     const displaySize = { width: video.videoWidth, height: video.videoHeight };
     faceapi.matchDimensions(canvas, displaySize);
+
+    const expressionChart = new Chart(expressionChartCtx, {
+        type: 'pie', // Change chart type to 'pie'
+        data: {
+            labels: [], // Nama ekspresi
+            datasets: [{
+                label: 'Confidence (%)',
+                data: [], // Nilai confidence
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            }
+        }
+    });
 
     // Start face detection loop
     setInterval(async () => {
@@ -59,18 +96,23 @@ video.addEventListener('playing', () => {
             console.log(gender);
         });
 
-        // Clear previous results
-        expressionList.innerHTML = '';
-
         // Display results
         resizedDetections.forEach(detection => {
             const expressions = detection.expressions;
             const sortedExpressions = Object.entries(expressions).sort((a, b) => b[1] - a[1]);
+
+            // Update expression list
+            expressionList.innerHTML = '';
             sortedExpressions.forEach(([expression, confidence]) => {
                 const li = document.createElement('li');
                 li.textContent = `${expression}: ${(confidence * 100).toFixed(2)}%`;
                 expressionList.appendChild(li);
             });
+
+            // Update chart data
+            expressionChart.data.labels = sortedExpressions.map(([expression]) => expression);
+            expressionChart.data.datasets[0].data = sortedExpressions.map(([_, confidence]) => (confidence * 100).toFixed(2));
+            expressionChart.update();
         });
     }, 100);
 });
